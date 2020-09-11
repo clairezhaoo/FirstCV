@@ -17,3 +17,21 @@ def rotate(image, angle, center = None, scale = 1.0):
     M = cv2.getRotationMatrix2D(center, angle, scale)
     rotated = cv2.warpAffine(image, M, (w,h))
     return rotated
+
+def resize(image, width = None, height = None, inter = cv2.INTER_AREA):
+    dim = None
+    (h, w) = image.shape[:2]
+
+    if width is None and height is None:     # check that there is numerical value
+        return image
+
+    if width is None:   # resizing via height
+        r = height / float(h)
+        dim = (int(w*r), height)
+
+    else:               # resizing via width
+        r = width / float(w)
+        dim = (width, int(h*r))
+
+    resized = cv2.resize(image, dim, interpolation = inter)
+    return resized
