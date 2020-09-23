@@ -3,11 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import cv2
+
 # load all images
 entrancePath = "entrance.png"
 peppaPath = "peppa.png"
 entranceImage = cv2.imread(entrancePath, -1)  # -1 for IMAGE_UNCHANGED
 peppaImage = cv2.imread(peppaPath, -1)
+
 # display background
 cv2.imshow("Image", entranceImage)
 cv2.waitKey(0)
@@ -28,8 +30,8 @@ entranceImage_bg = cv2.bitwise_and(roi, roi, mask = mask_inv)
 peppaImage_fg = cv2.bitwise_and(peppaImage, peppaImage, mask = mask)
 
 # put peppa in ROI and make modifications
-dst = cv2.add(entranceImage_bg, peppaImage,_fg)
+dst = cv2.add(entranceImage_bg, peppaImage_fg)
 entranceImage[0:rows, 0:cols] = dst
 
-cv2.imshow("res", entranceImage)
+cv2.imshow("hello", entranceImage)
 cv2.waitKey(0)
