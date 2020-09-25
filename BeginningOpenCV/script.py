@@ -15,6 +15,7 @@ def displayAndRemove(image, label, text):
 
 
 def overlay(background, foreground):
+    """Purpose is to put one image on top of another by using masking, thresholding, and bitwise"""
     # keep copy of background
     backgroundCopy = background.copy()
     # ROI to add object
@@ -37,6 +38,7 @@ def overlay(background, foreground):
     background[0:rows, 0:cols] = dst
 
     return background, backgroundCopy
+
 
 darkforestImage = cv2.imread("darkforest.png")
 eggImage = cv2.imread("egg.png")
@@ -103,5 +105,7 @@ def main():
     cv2.createTrackbar(trackbarName, titleWindow, 0, alpha_slider_max, onTrackbar)
     onTrackbar(0)
     cv2.waitKey(0)
+
+    
 
 main()
