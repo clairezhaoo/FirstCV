@@ -9,7 +9,7 @@ def displayAndRemove(image, label, text):
     cv2.destroyAllWindows()
     # if text supplied, need to write it onto image
     if text != None:
-        cv2.putText(image, text, (170, 180), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 2)
+        cv2.putText(image, text, (170, 150), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 2)
     cv2.imshow(label, image)
     k = cv2.waitKey(0)
     return k
@@ -63,12 +63,12 @@ def countingEggs(image):
 
     countedEggs = image.copy()
     cv2.drawContours(countedEggs, cnts, -1, (255, 23, 165), 5)
-    cv2.imshow("These the 5 golden eggs (press any key)", countedEggs)
+    cv2.imshow("These are the 5 golden eggs (press any key)", countedEggs)
     cv2.waitKey(0)
 
 
 def applyHSV(image):
-    hsv = cv2.cvtColor)image, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     return hsv
 
 
@@ -86,6 +86,7 @@ def main():
     eggPath = "egg.png"
     goldenEggsPath = "goldenEggs.png"
     gatePath = "gate.png"
+    familyPath = "family.png"
 
     # load all images
     bridgeImage = cv2.imread(bridgePath)
@@ -100,6 +101,7 @@ def main():
     eggImage = cv2.imread(eggPath)
     goldenEggsImage = cv2.imread(goldenEggsPath)
     gateImage = cv2.imread(gatePath)
+    familyImage = cv2.imread(familyPath)
 
     # display welcome
     k = displayAndRemove(welcomeImage, "Welcome to Peppa's Lost Journey!", "Peppa is lost. Help her return home!")
@@ -122,7 +124,7 @@ def main():
 
     # dark forest phase
     k = displayAndRemove(darkforestImage, "You made it across the bridge! Peppa is now in a dark forest (press any key)", None)
-    titleWindow = "Drag the flashlight bar to see in the dark forest."
+    titleWindow = "Drag the flashlight bar at the bottom to see in the dark forest."
     alpha_slider_max = 100
     cv2.namedWindow(titleWindow)
     trackbarName = "Flashlight Slider"
@@ -143,10 +145,13 @@ def main():
         if k == 53:    # correct key value 5
             hsv = applyHSV(gateImage)
             break
-        title = "Incorrect. Try again.' (Press number keys)"
+        title = "Incorrect. Try again. (Press number keys)"
 
-    k = displayAndRemove(hsv, "Congrats, Peppa is out of the forest! (press any key)")
+    k = displayAndRemove(hsv, "Congrats, the forest is opening! (press any key)", None)
     cv2.waitKey()
+
+    # ending phase
+    k = displayAndRemove(familyImage, "The end. Peppa is now with home with her family (press any key)", "Yayy! Thank you for getting Peppa home.")
 
 
 
