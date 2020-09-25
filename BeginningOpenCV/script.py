@@ -43,6 +43,7 @@ def overlay(background, foreground):
 darkforestImage = cv2.imread("darkforest.png")
 eggImage = cv2.imread("egg.png")
 def onTrackbar(val):
+    """Purpose is to create a trackbar to go between wieghted image addition"""
     titleWindow = "Drag the flashlight bar to see in the dark forest."
     alpha_slider_max = 100
 
@@ -50,6 +51,47 @@ def onTrackbar(val):
     beta = ( 1.0 - alpha )
     dst = cv2.addWeighted(eggImage, alpha, darkforestImage, beta, 0.0)
     cv2.imshow(titleWindow, dst)
+
+def masking(image):
+     # Create an image for sketching the mask
+    image_mark = image.copy()
+    #sketch = Sketcher('Image', [image_mark], lambda : ((255, 255, 255), 255))
+
+    # define range of white color in HSV
+    lower_white = np.array([0,0,255])
+    upper_white = np.array([255,255,255])
+
+    # Create the mask
+    mask = cv2.inRange(image_mark, lower_white, upper_white)
+
+    # create the inverted mask
+    mask_inv = cv2.bitwise_not(mask)
+
+    # convert to grayscale image
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # extract the dimensions of the original image
+    rows, cols, channels = image.shape
+    image = image[0:rows, 0:cols]
+
+    # bitwise-OR mask and original image
+    colored_portion = cv2.bitwise_or(image, image, mask = mask)
+    colored_portion = colored_portion[0:rows, 0:cols]
+
+    # bitwise-OR inverse mask and grayscale image
+    gray_portion = cv2.bitwise_or(gray, gray, mask = mask_inv)
+    gray_portion = np.stack((gray_portion,)*3, axis=-1)
+
+    # combine the two images
+    output = colored_portion + gray_portion
+
+    # Create a table showing input image, mask, and output
+    mask = np.stack((mask,)*3, axis=-1)
+    table_of_images = np.concatenate((image, mask, output), axis=1)
+
+    cv2.imshow('Table of Images', table_of_images)
+    cv2.waitKey(0) # Wait for a keyboard event
+
 
 
 def main():
@@ -64,6 +106,7 @@ def main():
     peppa5Path = "peppa5.png"
     darkforestPath = "darkforest.png"
     eggPath = "egg.png"
+    goldenEggsPath = "goldenEggs.png"
 
     # load all images
     bridgeImage = cv2.imread(bridgePath)
@@ -76,6 +119,7 @@ def main():
     peppa5Image = cv2.imread(peppa5Path)
     darkforestImage = cv2.imread(darkforestPath)
     eggImage = cv2.imread(eggPath)
+    goldenEggsImage = cv2.imread(goldenEggsPath)
 
     # display welcome
     displayAndRemove(welcomeImage, "Welcome to Peppa's Lost Journey!", "Peppa is lost. Help her return home!")
@@ -96,7 +140,7 @@ def main():
             imagesCombined, bridgeCopy = overlay(bridgeCopy, currentPeppa)
             i += 1   # increment peppas moves each time
 
-    # next phase
+    # dark forest phase
     displayAndRemove(darkforestImage, "You made it across the bridge! Peppa is now in a dark forest (space bar)", None)
     titleWindow = "Drag the flashlight bar to see in the dark forest."
     alpha_slider_max = 100
@@ -106,6 +150,14 @@ def main():
     onTrackbar(0)
     cv2.waitKey(0)
 
-    
+    # finding eggs phase
+    displayAndRemove(eggImage, "Wow, there is a giant golden egg! It must be a clue... (space bar)", None)
+    displayAndRemove(goldenEggsImage, "Hit space to identify each one of the golden eggs.", None)
+    masking(goldenEggsImage)
+
+
+
+
+
 
 main()
