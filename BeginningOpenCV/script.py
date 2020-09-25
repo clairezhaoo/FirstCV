@@ -55,6 +55,7 @@ def onTrackbar(val):
 
 
 def countingEggs(image):
+    """Use countours to show all the eggs"""
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (11, 11), 0)
     edged = cv2.Canny(blurred, 50, 250)
@@ -152,11 +153,5 @@ def main():
 
     # ending phase
     k = displayAndRemove(familyImage, "The end. Peppa is now with home with her family (press any key)", "Yayy! Thank you for getting Peppa home.")
-
-
-
-
-
-
-
+    
 main()
