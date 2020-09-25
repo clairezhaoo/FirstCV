@@ -1,7 +1,7 @@
 # FirstCV
 Using Practical Python and OpenCV, 4th Edition
 
-## **Completed**
+### ** *Completed* **
 ### Peppa's Lost Journey
 BeginningOpenCV contains the project assignment.
 Run 'python script.py'
