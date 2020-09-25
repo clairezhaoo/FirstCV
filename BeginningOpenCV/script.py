@@ -11,7 +11,8 @@ def displayAndRemove(image, label, text):
     if text != None:
         cv2.putText(image, text, (170, 180), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 2)
     cv2.imshow(label, image)
-    cv2.waitKey(0)
+    k = cv2.waitKey(0)
+    return k
 
 
 def overlay(background, foreground):
@@ -52,6 +53,7 @@ def onTrackbar(val):
     dst = cv2.addWeighted(eggImage, alpha, darkforestImage, beta, 0.0)
     cv2.imshow(titleWindow, dst)
 
+
 def countingEggs(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (11, 11), 0)
@@ -61,9 +63,13 @@ def countingEggs(image):
 
     countedEggs = image.copy()
     cv2.drawContours(countedEggs, cnts, -1, (255, 23, 165), 5)
-    cv2.imshow("These are all the golden eggs (space bar)", countedEggs)
+    cv2.imshow("These the 5 golden eggs (press any key)", countedEggs)
     cv2.waitKey(0)
 
+
+def applyHSV(image):
+    hsv = cv2.cvtColor)image, cv2.COLOR_BGR2HSV)
+    return hsv
 
 
 def main():
@@ -79,6 +85,7 @@ def main():
     darkforestPath = "darkforest.png"
     eggPath = "egg.png"
     goldenEggsPath = "goldenEggs.png"
+    gatePath = "gate.png"
 
     # load all images
     bridgeImage = cv2.imread(bridgePath)
@@ -92,9 +99,10 @@ def main():
     darkforestImage = cv2.imread(darkforestPath)
     eggImage = cv2.imread(eggPath)
     goldenEggsImage = cv2.imread(goldenEggsPath)
+    gateImage = cv2.imread(gatePath)
 
     # display welcome
-    displayAndRemove(welcomeImage, "Welcome to Peppa's Lost Journey!", "Peppa is lost. Help her return home!")
+    k = displayAndRemove(welcomeImage, "Welcome to Peppa's Lost Journey!", "Peppa is lost. Help her return home!")
 
     # list of peppas at different locations
     peppasMoves = [peppa1Image, peppa2Image, peppa3Image, peppa4Image, peppa5Image]
@@ -113,7 +121,7 @@ def main():
             i += 1   # increment peppas moves each time
 
     # dark forest phase
-    displayAndRemove(darkforestImage, "You made it across the bridge! Peppa is now in a dark forest (space bar)", None)
+    k = displayAndRemove(darkforestImage, "You made it across the bridge! Peppa is now in a dark forest (press any key)", None)
     titleWindow = "Drag the flashlight bar to see in the dark forest."
     alpha_slider_max = 100
     cv2.namedWindow(titleWindow)
@@ -123,9 +131,23 @@ def main():
     cv2.waitKey(0)
 
     # finding eggs phase
-    displayAndRemove(eggImage, "Wow, there is a giant golden egg! It must be a clue... (space bar)", None)
-    displayAndRemove(goldenEggsImage, "There are more eggs! Press any key to count how many golden eggs.", None)
+    k = displayAndRemove(eggImage, "Wow, there is a giant golden egg! It must be a clue... (press any key)", None)
+    k = displayAndRemove(goldenEggsImage, "There are more eggs! Press any key to count how many golden eggs.", None)
     countingEggs(goldenEggsImage)
+
+    # exit gate phase
+    k = displayAndRemove(gateImage, "There is the exit! How do we pass the guards? (press any key)", None)
+    title = "Guards: 'Tell us how many golden eggs there were' (Press number keys)"
+    while True:
+        k = displayAndRemove(gateImage, title, None)
+        if k == 53:    # correct key value 5
+            hsv = applyHSV(gateImage)
+            break
+        title = "Incorrect. Try again.' (Press number keys)"
+
+    k = displayAndRemove(hsv, "Congrats, Peppa is out of the forest! (press any key)")
+    cv2.waitKey()
+
 
 
 
