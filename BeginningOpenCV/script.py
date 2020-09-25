@@ -45,7 +45,7 @@ darkforestImage = cv2.imread("darkforest.png")
 eggImage = cv2.imread("egg.png")
 def onTrackbar(val):
     """Purpose is to create a trackbar to go between wieghted image addition"""
-    titleWindow = "Drag the flashlight bar to see in the dark forest."
+    titleWindow = "Drag the flashlight bar at the bottom to see in the dark forest."
     alpha_slider_max = 100
 
     alpha = val / alpha_slider_max
@@ -105,7 +105,7 @@ def main():
     familyImage = cv2.imread(familyPath)
 
     # display welcome
-    k = displayAndRemove(welcomeImage, "Welcome to Peppa's Lost Journey!", "Peppa is lost. Help her return home!")
+    k = displayAndRemove(welcomeImage, "Welcome to Peppa's Lost Journey!", "Help Peppa escape the mystery forest!")
 
     # list of peppas at different locations
     peppasMoves = [peppa1Image, peppa2Image, peppa3Image, peppa4Image, peppa5Image]
@@ -149,9 +149,8 @@ def main():
         title = "Incorrect. Try again. (Press number keys)"
 
     k = displayAndRemove(hsv, "Congrats, the forest is opening! (press any key)", None)
-    cv2.waitKey()
 
     # ending phase
     k = displayAndRemove(familyImage, "The end. Peppa is now with home with her family (press any key)", "Yayy! Thank you for getting Peppa home.")
-    
+
 main()
